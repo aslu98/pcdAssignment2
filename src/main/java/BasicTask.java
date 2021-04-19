@@ -1,4 +1,7 @@
-public abstract class BasicTask {
+import java.util.Map;
+import java.util.concurrent.RecursiveTask;
+
+public abstract class BasicTask extends RecursiveTask<WordFreqMap> {
 
 	private String name;
 

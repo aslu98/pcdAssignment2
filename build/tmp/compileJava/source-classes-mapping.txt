@@ -6,27 +6,27 @@ Main.java
  Main
 Viewer.java
  Viewer
-BasicTask.java
- BasicTask
+View.java
+ View
 WordFreqMap.java
  WordFreqMap
 BoundedBuffer.java
  BoundedBuffer
 Flag.java
  Flag
-DocLoader.java
- DocLoader
+ViewFrame.java
+ ViewFrame
 InputListener.java
  InputListener
+Controller.java
+ Controller
+BasicTask.java
+ BasicTask
+Master.java
+ Master
+DocLoader.java
+ DocLoader
 TextAnalyzer.java
  TextAnalyzer
 DocDiscoverer.java
  DocDiscoverer
-Controller.java
- Controller
-Master.java
- Master
-View.java
- View
-ViewFrame.java
- ViewFrame

@@ -3,48 +3,49 @@ import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.RecursiveTask;
 
-public class DocLoader extends BasicTask implements Callable<PDFTextStripper> {
+public class DocLoader extends BasicTask{
 
-	private BoundedBuffer<File> docFiles;
-	private BoundedBuffer<String> chunks;
 	private PDFTextStripper stripper;
 	private Flag stopFlag;
+	private WordFreqMap map;
+	private HashMap<String,String> wordsToDiscard;
+	private List<RecursiveTask<WordFreqMap>> forks;
+	private File doc;
 	
-	public DocLoader(String id, BoundedBuffer<File> docFiles, BoundedBuffer<String> chunks, Flag stopFlag) throws Exception  {
+	public DocLoader(String id, Flag stopFlag, File f, HashMap<String,String> wordsToDiscard, WordFreqMap map) throws Exception  {
 		super("doc-loader-" + id);
 		this.stopFlag = stopFlag;
-		this.docFiles = docFiles;
-		this.chunks = chunks;
         stripper = new PDFTextStripper();
+		this.map = map;
+		this.wordsToDiscard = wordsToDiscard;
+		this.doc = f;
+		this.forks = new LinkedList<>();
 	}
 
 	@Override
-	public PDFTextStripper call(){
+	public WordFreqMap compute(){
 		log("started");
-		int nJobs = 0;
-		boolean noMoreDocs = false;
-		while (!noMoreDocs) {
+		if (!stopFlag.isSet()) {
+			log("got a doc to load: " + doc.getName());
 			try {
-				File doc = docFiles.get();
-				if (!stopFlag.isSet()) {
-					nJobs++;
-					log("got a doc to load: " + doc.getName() + " - job: " + nJobs);
-					try {
-						loadDoc(doc);
-					} catch (Exception ex) {
-					}
-				} else {
-					log("stopped");
-				}
-			} catch (ClosedException ex) {
-				log("no more docs.");
-				noMoreDocs = true;
+				loadDoc(doc);
+			} catch (Exception ex) {
 			}
+		} else {
+			log("stopped");
 		}
 		log("done.");
-		return stripper;
+		for (RecursiveTask<WordFreqMap> task : forks) {
+			map = task.join();
+		}
+		return map;
 	}
 	
 	private void loadDoc(File doc) throws Exception {
@@ -61,8 +62,9 @@ public class DocLoader extends BasicTask implements Callable<PDFTextStripper> {
             stripper.setStartPage(i);
             stripper.setEndPage(i);
             String chunk =  stripper.getText(document);
-			chunks.put(chunk);	
-			log("chunk added (" + i + ")");
+			TextAnalyzer task = new TextAnalyzer("" + forks.size(), stopFlag, chunk, wordsToDiscard, map);
+			forks.add(task);
+			task.fork();
         }
   	}
 }

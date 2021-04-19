@@ -1,34 +1,48 @@
-import java.io.File;
-import java.util.concurrent.Callable;
+import org.bouncycastle.crypto.generators.DHBasicKeyPairGenerator;
 
-public class DocDiscoverer extends BasicTask implements Callable<Boolean> {
+import javax.swing.text.Document;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.RecursiveTask;
+
+public class DocDiscoverer extends BasicTask {
 
 	private File startDir;
-	private BoundedBuffer<File> docFiles;
+	private List<RecursiveTask<WordFreqMap>> forks;
 	private int nDocsFound;
 	private Flag stopFlag;
+	private WordFreqMap map;
+	private HashMap<String,String> wordsToDiscard;
 	
-	public DocDiscoverer(File dir, BoundedBuffer<File> docFiles, Flag stopFlag) {
+	public DocDiscoverer(File dir, Flag stopFlag, HashMap<String,String> wordsToDiscard, WordFreqMap map) {
 		super("doc-discoverer");
 		this.startDir = dir;	
-		this.docFiles = docFiles;
+		this.forks = new LinkedList<>();
 		this.stopFlag = stopFlag;
+		this.map = map;
+		this.wordsToDiscard = wordsToDiscard;
 	}
 
 	@Override
-	public Boolean call() {
+	public WordFreqMap compute() {
 		log("started.");
 		nDocsFound = 0;
 		if (startDir.isDirectory()) {
 			explore(startDir);
-			docFiles.close();
 			if (stopFlag.isSet()) {
 				log("job done - " + nDocsFound + " docs found.");
 			} else {
 				log("stopped.");
 			}
 		}
-		return true;
+		for (RecursiveTask<WordFreqMap> task : forks) {
+			map = task.join();
+		}
+		return map;
 	}
 	
 	private void explore(File dir) {
@@ -39,7 +53,9 @@ public class DocDiscoverer extends BasicTask implements Callable<Boolean> {
 				} else if (f.getName().endsWith(".pdf")) {
 					try {
 						log("find a new doc: " + f.getName());
-						docFiles.put(f);
+						DocLoader task = new DocLoader("" + forks.size(), stopFlag, f, wordsToDiscard, map);
+						forks.add(task);
+						task.fork();
 						nDocsFound++;
 					} catch (Exception ex) {
 						ex.printStackTrace();
