@@ -2,27 +2,27 @@ part1/WordFreqMap.java
  part1.WordFreqMap
 part1/InputListener.java
  part1.InputListener
-part1/Main.java
- part1.Main
+part1/DocDiscovererTask.java
+ part1.DocDiscovererTask
 part1/Flag.java
  part1.Flag
 part1/DefaultInputs.java
  part1.DefaultInputs
-part1/Controller.java
- part1.Controller
+part1/TextAnalyzerTask.java
+ part1.TextAnalyzerTask
 part1/View.java
  part1.View
 part1/ViewerTask.java
  part1.ViewerTask
 part1/DocLoaderTask.java
  part1.DocLoaderTask
-part1/Master.java
- part1.Master
-part1/ViewFrame.java
- part1.ViewFrame
-part1/TextAnalyzerTask.java
- part1.TextAnalyzerTask
 part1/BasicTask.java
  part1.BasicTask
-part1/DocDiscovererTask.java
- part1.DocDiscovererTask
+part1/ViewFrame.java
+ part1.ViewFrame
+part1/Master.java
+ part1.Master
+part1/Main.java
+ part1.Main
+part1/Controller.java
+ part1.Controller

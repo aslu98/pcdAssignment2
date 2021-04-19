@@ -31,10 +31,10 @@ public class TextAnalyzerTask extends BasicTask<WordFreqMap> {
 			} else {
 				log("stopped.");
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		log ("done");
 
 		return map;
 	}

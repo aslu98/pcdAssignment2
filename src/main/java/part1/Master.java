@@ -42,7 +42,7 @@ public class Master extends BasicTask<Void> {
 
 			DocDiscovererTask masterTask = new DocDiscovererTask(dir, stopFlag, wordsToDiscard, map);
 			masterTask.fork();
-			map = masterTask.join();
+			masterTask.join();
 
 			long t2 = System.currentTimeMillis();
 			done.set();

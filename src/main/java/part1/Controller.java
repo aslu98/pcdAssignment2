@@ -23,7 +23,7 @@ public class Controller implements InputListener {
 
 	public synchronized void started(File dir, File wordsFile, int nMostFreqWords){
 		stopFlag.reset();
-		forkJoinPool.invoke(new Master(wordsFile, dir, nMostFreqWords,stopFlag, view));
+		forkJoinPool.submit(new Master(wordsFile, dir, nMostFreqWords,stopFlag, view));
 	}
 
 	public synchronized void stopped() {
