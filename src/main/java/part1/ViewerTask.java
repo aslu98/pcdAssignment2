@@ -2,7 +2,7 @@ package part1;
 
 import java.util.Arrays;
 
-public class ViewerTask extends BasicTask<Void> {
+public class ViewerTask extends BasicTask{
 
 	private WordFreqMap map;
 	private View view;
@@ -15,7 +15,7 @@ public class ViewerTask extends BasicTask<Void> {
 		this.done = done;
 	}
 
-	public Void compute() {
+	public void compute() {
 		log("started.");
 		while (!done.isSet()) {
 			try {
@@ -26,6 +26,5 @@ public class ViewerTask extends BasicTask<Void> {
 			}
 		}
 		view.update(map.getCurrentMostFreq());
-		return null;
 	}
 }

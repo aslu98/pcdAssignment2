@@ -8,15 +8,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 
-public class DocLoaderTask extends BasicTask<WordFreqMap>{
+public class DocLoaderTask extends BasicTask{
 
 	private PDFTextStripper stripper;
 	private Flag stopFlag;
 	private WordFreqMap map;
 	private HashMap<String,String> wordsToDiscard;
-	private List<RecursiveTask<WordFreqMap>> forks;
+	private List<RecursiveAction> forks;
 	private File doc;
 	
 	public DocLoaderTask(String id, Flag stopFlag, File f, HashMap<String,String> wordsToDiscard, WordFreqMap map) throws Exception  {
@@ -30,7 +31,7 @@ public class DocLoaderTask extends BasicTask<WordFreqMap>{
 	}
 
 	@Override
-	public WordFreqMap compute(){
+	public void compute(){
 		log("started");
 		if (!stopFlag.isSet()) {
 			log("got a doc to load: " + doc.getName());
@@ -43,11 +44,9 @@ public class DocLoaderTask extends BasicTask<WordFreqMap>{
 		}
 		log("done.");
 
-		for (RecursiveTask<WordFreqMap> task : forks) {
+		for (RecursiveAction task : forks) {
 			task.join();
 		}
-
-		return map;
 	}
 	
 	private void loadDoc(File doc) throws Exception {

@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.AbstractMap;
 import java.util.HashMap;
 
-public class Master extends BasicTask<Void> {
+public class Master extends BasicTask {
 
 	private final File configFile;
 	private final File dir;
@@ -28,7 +28,7 @@ public class Master extends BasicTask<Void> {
 		this.stopFlag = stopFlag;
 	}
 
-	public Void compute() {
+	public void compute() {
 		try {
 			log("started ");
 			long t0 = System.currentTimeMillis();
@@ -37,8 +37,8 @@ public class Master extends BasicTask<Void> {
 			loadWordsToDiscard(configFile);
 
 			Flag done = new Flag();
-			ViewerTask viewerTask = new ViewerTask(map,view,done);
-			viewerTask.fork();
+			ViewerTask viewer= new ViewerTask(map,view,done);
+			viewer.fork();
 
 			DocDiscovererTask masterTask = new DocDiscovererTask(dir, stopFlag, wordsToDiscard, map);
 			masterTask.fork();
@@ -46,6 +46,7 @@ public class Master extends BasicTask<Void> {
 
 			long t2 = System.currentTimeMillis();
 			done.set();
+			viewer.join();
 			view.done();
 			
 			elabMostFreqWords();
@@ -55,7 +56,6 @@ public class Master extends BasicTask<Void> {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return null;
 	}
 		
 	private void loadWordsToDiscard(File configFile) {

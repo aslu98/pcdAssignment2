@@ -1,7 +1,7 @@
 package part1;
-import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.RecursiveAction;
 
-public abstract class BasicTask<T> extends RecursiveTask<T> {
+public abstract class BasicTask<T> extends RecursiveAction {
 
 	private String name;
 

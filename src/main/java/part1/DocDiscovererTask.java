@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 
-public class DocDiscovererTask extends BasicTask<WordFreqMap> {
+public class DocDiscovererTask extends BasicTask {
 
 	private File startDir;
-	private List<RecursiveTask<WordFreqMap>> forks;
+	private List<RecursiveAction> forks;
 	private int nDocsFound;
 	private Flag stopFlag;
 	private WordFreqMap map;
@@ -25,7 +26,7 @@ public class DocDiscovererTask extends BasicTask<WordFreqMap> {
 	}
 
 	@Override
-	public WordFreqMap compute() {
+	public void compute() {
 		log("started.");
 		nDocsFound = 0;
 		if (startDir.isDirectory()) {
@@ -37,11 +38,9 @@ public class DocDiscovererTask extends BasicTask<WordFreqMap> {
 			}
 		}
 
-		for (RecursiveTask<WordFreqMap> task : forks) {
+		for (RecursiveAction task : forks) {
 			task.join();
 		}
-
-		return map;
 	}
 	
 	private void explore(File dir) {

@@ -2,7 +2,7 @@ package part1;
 
 import java.util.HashMap;
 
-public class TextAnalyzerTask extends BasicTask<WordFreqMap> {
+public class TextAnalyzerTask extends BasicTask {
 
 	private HashMap<String,String> wordsToDiscard;
 	private WordFreqMap map;
@@ -17,7 +17,7 @@ public class TextAnalyzerTask extends BasicTask<WordFreqMap> {
 		this.chunk = chunk;
 	}
 	
-	public WordFreqMap compute() {
+	public void compute() {
 		try {		    
 		    String del = "[\\x{201D}\\x{201C}\\s'\", ?.@;:!-]+";
 			if (!stopFlag.isSet()) {
@@ -35,7 +35,5 @@ public class TextAnalyzerTask extends BasicTask<WordFreqMap> {
 			ex.printStackTrace();
 		}
 		log ("done");
-
-		return map;
 	}
 }
