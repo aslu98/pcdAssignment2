@@ -2,21 +2,20 @@ package part1;
 
 import java.util.Arrays;
 
-public class ViewerTask extends BasicTask<Void> {
+public class Viewer extends Thread {
 
 	private WordFreqMap map;
 	private View view;
 	private Flag done;
 	
-	protected ViewerTask(WordFreqMap map, View view, Flag done) {
+	protected Viewer(WordFreqMap map, View view, Flag done) {
 		super("viewer");
 		this.map = map;
 		this.view = view;
 		this.done = done;
 	}
 
-	public Void compute() {
-		log("started.");
+	public void run() {
 		while (!done.isSet()) {
 			try {
 				view.update(map.getCurrentMostFreq());
@@ -26,6 +25,5 @@ public class ViewerTask extends BasicTask<Void> {
 			}
 		}
 		view.update(map.getCurrentMostFreq());
-		return null;
 	}
 }
