@@ -1,4 +1,4 @@
-target = part1.jpf.Main
+target = part1.jpf.jpfMain
 
 listener=gov.nasa.jpf.listener.PreciseRaceDetector
 

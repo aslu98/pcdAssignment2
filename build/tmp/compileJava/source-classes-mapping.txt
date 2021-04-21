@@ -6,6 +6,8 @@ part1/Flag.java
  part1.Flag
 part1/DocLoaderTask.java
  part1.DocLoaderTask
+part1/jpf/FileMockImpl.java
+ part1.jpf.FileMockImpl
 part1/InputListener.java
  part1.InputListener
 part1/TextAnalyzerTask.java
@@ -18,18 +20,12 @@ part1/BasicTask.java
  part1.BasicTask
 part1/DocDiscovererTask.java
  part1.DocDiscovererTask
-part1/jpf/View.java
- part1.jpf.View
-part1/jpf/DefaultInputs.java
- part1.jpf.DefaultInputs
 part1/jpf/Master.java
  part1.jpf.Master
 part1/DefaultInputs.java
  part1.DefaultInputs
 part1/jpf/WordFreqMap.java
  part1.jpf.WordFreqMap
-part1/jpf/ViewFrame.java
- part1.jpf.ViewFrame
 part1/View.java
  part1.View
 part1/jpf/DocDiscovererTask.java
@@ -38,19 +34,17 @@ part1/jpf/DocLoaderTask.java
  part1.jpf.DocLoaderTask
 part1/Master.java
  part1.Master
-part1/jpf/InputListener.java
- part1.jpf.InputListener
 part1/ViewFrame.java
  part1.ViewFrame
-part1/jpf/ViewerTask.java
- part1.jpf.ViewerTask
 part1/jpf/TextAnalyzerTask.java
  part1.jpf.TextAnalyzerTask
 part1/Controller.java
  part1.Controller
-part1/jpf/Flag.java
- part1.jpf.Flag
-part1/jpf/Controller.java
- part1.jpf.Controller
-part1/jpf/Main.java
- part1.jpf.Main
+part1/jpf/File.java
+ part1.jpf.File
+part1/jpf/DirMockImpl.java
+ part1.jpf.DirMockImpl
+part1/jpf/ModelCheckingData.java
+ part1.jpf.ModelCheckingData
+part1/jpf/jpfMain.java
+ part1.jpf.jpfMain
